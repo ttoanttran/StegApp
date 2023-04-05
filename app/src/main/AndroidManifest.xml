@@ -16,6 +16,7 @@
             android:exported="false" />
         <activity
             android:name=".encrypt_page"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
