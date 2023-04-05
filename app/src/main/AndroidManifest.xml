@@ -14,6 +14,7 @@
         <activity
             android:name=".decrypt_page"
             android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity
             android:name=".encrypt_page"
