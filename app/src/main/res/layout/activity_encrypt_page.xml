@@ -21,27 +21,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/e_button"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="30dp"
-        android:layout_marginEnd="50dp"
-        android:backgroundTint="#2E5FDC"
+        android:background="@drawable/button_background"
         android:text="Encrypt"
-        app:layout_constraintEnd_toStartOf="@+id/download_button"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/message_password" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/download_button"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:layout_marginEnd="70dp"
-        android:backgroundTint="#2E5FDC"
+        android:layout_marginEnd="40dp"
+        android:background="@drawable/button_background"
         android:text="Download"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/message_password" />
 
@@ -110,9 +112,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:backgroundTint="#2150DF"
         android:text="Upload Image"
         android:textSize="10sp"
-        android:backgroundTint="#819DF1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/e_image" />
