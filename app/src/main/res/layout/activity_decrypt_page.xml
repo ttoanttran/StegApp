@@ -21,27 +21,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/d_button"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="30dp"
-        android:layout_marginEnd="50dp"
-        android:backgroundTint="#2E5FDC"
-        android:text="Decrypt"
-        app:layout_constraintEnd_toStartOf="@+id/download_button"
+        android:background="@drawable/button_background"
+        android:text="@string/encrypt"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/decrypted_message" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/download_button"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:layout_marginEnd="70dp"
-        android:text="Download"
-        android:backgroundTint="#2E5FDC"
+        android:layout_marginEnd="40dp"
+        android:background="@drawable/button_background"
+        android:text="@string/download"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/decrypted_message" />
 
