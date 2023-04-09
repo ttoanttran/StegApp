@@ -7,50 +7,39 @@
     android:background="@color/night"
     tools:context=".MainActivity">
 
-    <ImageView
-        android:id="@+id/mainbackground"
-        android:layout_width="413dp"
-        android:layout_height="489dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/background1" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="150dp"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="60dp"
         android:layout_marginEnd="150dp"
-        android:fontFamily="@font/abhaya_libre_bold"
+        android:fontFamily="@font/open_sans_extrabold"
         android:text="Steganography"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="#FFFFFF"
-        android:textSize="50sp"
+        android:textSize="42sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/encrypt_button"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="-30dp"
         android:background="@drawable/button_background"
         android:text="Encrypt"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/description" />
+        app:layout_constraintTop_toBottomOf="@+id/logo" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/decrypt_button"
@@ -67,21 +56,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/encrypt_button" />
 
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="300dp"
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:fontFamily="@font/abhaya_libre"
-        android:gravity="center"
-        android:text="Start off by selecting whether you want to encrypt or decrypt your image."
-        android:textColor="#FFFFFF"
-        android:textSize="18dp"
-        android:textStyle="bold"
+        android:layout_marginTop="-80dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:srcCompat="@drawable/logo" />
+
+    <ImageView
+        android:id="@+id/bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="260dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:srcCompat="@drawable/darkdrop" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
