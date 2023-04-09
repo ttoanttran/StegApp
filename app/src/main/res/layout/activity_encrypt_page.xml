@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/night"
     tools:context=".encrypt_page">
 
     <TextView
@@ -14,6 +15,7 @@
         android:layout_marginTop="28dp"
         android:layout_marginEnd="150dp"
         android:text="Enter your hidden message"
+        android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,13 +51,15 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/decrypted_message"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="300dp"
         android:layout_marginEnd="20dp"
         android:hint="@string/message"
+        android:textColorHint="@color/night"
+        app:boxBackgroundColor="@color/light_blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/e_description">
@@ -75,12 +79,16 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/message_password"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:hint="@string/password"
+        android:textColorHint="@color/night"
+        app:boxBackgroundColor="@color/light_blue"
+        app:endIconMode="password_toggle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/decrypted_message">
@@ -112,7 +120,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:backgroundTint="#2150DF"
+        android:backgroundTint="#35A1BC"
         android:text="Upload Image"
         android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
