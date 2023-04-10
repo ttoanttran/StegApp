@@ -15,7 +15,7 @@
         android:layout_marginStart="150dp"
         android:layout_marginTop="60dp"
         android:layout_marginEnd="150dp"
-        android:fontFamily="@font/open_sans_extrabold"
+        android:fontFamily="serif-monospace"
         android:text="Steganography"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="#FFFFFF"
