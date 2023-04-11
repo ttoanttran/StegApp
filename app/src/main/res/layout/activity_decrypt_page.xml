@@ -108,7 +108,7 @@
     <ImageView
         android:id="@+id/d_image"
         android:layout_width="250dp"
-        android:layout_height="200dp"
+        android:layout_height="180dp"
         android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.509"
@@ -120,13 +120,31 @@
         android:id="@+id/upload_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="32dp"
         android:backgroundTint="#35A1BC"
         android:text="Upload Image"
         android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/d_image" />
+
+
+    <TextView
+        android:id="@+id/d_alert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="165dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="166dp"
+        android:text="Decrypted"
+        android:textColor="#939090"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/d_image" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
