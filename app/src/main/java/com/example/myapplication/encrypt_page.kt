@@ -2,12 +2,14 @@ package com.example.myapplication
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.material.textfield.TextInputEditText
 
 class encrypt_page : AppCompatActivity() {
 
@@ -39,9 +41,19 @@ class encrypt_page : AppCompatActivity() {
 
         encrypt_button.setOnClickListener {
             status_text.visibility = View.VISIBLE
+            val messagebox: TextInputEditText = findViewById(R.id.e_messagebox)
+            val test = convertToBinary(messagebox)
+
+            Log.d("Binary", test)
         }
+    }
 
+    private fun convertToBinary(messagebox: TextInputEditText): String {
+        val messageInput: String = messagebox.text.toString()
 
-
+        val binaryConvert: String = messageInput.toByteArray().joinToString {
+            String.format("%8s", it.toString(2)).replace(' ', '0')
+        }
+        return binaryConvert
     }
 }

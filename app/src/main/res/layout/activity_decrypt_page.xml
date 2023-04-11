@@ -14,7 +14,7 @@
         android:layout_marginStart="150dp"
         android:layout_marginTop="28dp"
         android:layout_marginEnd="150dp"
-        android:text="Enter your password"
+        android:text="Decrypt your chosen image"
         android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="@color/white"
@@ -93,7 +93,7 @@
         app:layout_constraintTop_toBottomOf="@+id/decrypt_password">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/messagebox"
+            android:id="@+id/d_messagebox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="top"
