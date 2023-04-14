@@ -56,4 +56,10 @@ class encrypt_page : AppCompatActivity() {
         }
         return binaryConvert
     }
+    private fun imageToBinary(){
+
+    }
+    private fun encryptMessage(){
+
+    }
 }
