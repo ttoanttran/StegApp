@@ -140,4 +140,4 @@ class encrypt_page : AppCompatActivity() {
         }
         return encodedBitmap
     }
-}
+

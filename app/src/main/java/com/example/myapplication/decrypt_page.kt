@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.material.textfield.TextInputEditText
 
 class decrypt_page : AppCompatActivity() {
 
@@ -39,6 +40,15 @@ class decrypt_page : AppCompatActivity() {
         decrypt_button.setOnClickListener {
             status_text.visibility = View.VISIBLE
         }
+
+    }
+    private fun binaryToText() {
+
+    }
+    private fun binaryToImage(){
+
+    }
+    private fun decryptMessage(){
 
     }
 }
