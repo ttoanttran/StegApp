@@ -75,7 +75,11 @@ class encrypt_page : AppCompatActivity() {
         }
     }
 
-    private fun encodeImage(image: ImageView, message: TextInputEditText, password: TextInputEditText): Bitmap {
+    private fun encodeImage(
+        image: ImageView,
+        message: TextInputEditText,
+        password: TextInputEditText
+    ): Bitmap {
         //turn message and password into a string first
         val messageString: String = message.text.toString()
         val passwordString: String = password.text.toString()
@@ -88,7 +92,11 @@ class encrypt_page : AppCompatActivity() {
 
         // turn imageView into a bitmap
         val drawable = image.drawable
-        val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.RGB_565)
+        val bitmap = Bitmap.createBitmap(
+            drawable.intrinsicWidth,
+            drawable.intrinsicHeight,
+            Bitmap.Config.RGB_565
+        )
         val canvas = Canvas(bitmap)
         image.draw(canvas)
 
@@ -127,8 +135,11 @@ class encrypt_page : AppCompatActivity() {
                     val pixel = bitmap.getPixel(x, y)
                     if (index < binaryMessage.length) {
                         val red = encodeBit(Color.red(pixel), binaryMessage[index])
-                        val green = encodeBit(Color.green(pixel), binaryMessage.getOrElse(index + 1) { '0' })
-                        val blue = encodeBit(Color.blue(pixel), binaryMessage.getOrElse(index + 2) { '0' })
+                        val green = encodeBit(
+                            Color.green(pixel),
+                            binaryMessage.getOrElse(index + 1) { '0' })
+                        val blue =
+                            encodeBit(Color.blue(pixel), binaryMessage.getOrElse(index + 2) { '0' })
                         val encodePixel = Color.rgb(red, green, blue)
                         encodedBitmap.setPixel(x, y, encodePixel)
                         index += 3
@@ -140,4 +151,5 @@ class encrypt_page : AppCompatActivity() {
         }
         return encodedBitmap
     }
+}
 
