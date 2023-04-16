@@ -54,9 +54,16 @@ class encrypt_page : AppCompatActivity() {
 
             val encodedImage = encodeImage(imageView, messagebox)
 
-            val m = getPixel(encodedImage)
+            val maxlen = 32 + convertToBinary(messagebox.text.toString()).length
+            val m = getPixel(encodedImage, maxlen)
             println(m.joinToString(""))
 
+            // get secret message by dropping first 32 bits
+            val secret_message = m.drop(32).toList()
+
+
+            val test = fromBinaryString(secret_message.joinToString(""))
+            println(test)
 
 
             status_text.visibility = View.VISIBLE
@@ -88,11 +95,13 @@ class encrypt_page : AppCompatActivity() {
     }
 
 
-    fun getPixel(bitmap: Bitmap): List<Int> {
-        var length = 36
+    fun getPixel(bitmap: Bitmap, maxlength: Int): List<Int> {
         var index = 0
         val pixelLSBs = mutableListOf<Int>()
         for (y in 0 until bitmap.height) {
+            if (index >= maxlength) {
+                break
+            }
             for (x in 0 until bitmap.width) {
                 val pixel = bitmap.getPixel(x, y)
                 // get only the red color channel
@@ -101,12 +110,9 @@ class encrypt_page : AppCompatActivity() {
                 pixelLSBs.add(r)
                 //pixelLSBs.add(g)
                 index += 1
-                if (index == length) {
+                if (index >= maxlength) {
                     break
                 }
-            }
-            if (index >= length) {
-                break
             }
         }
         return pixelLSBs
@@ -136,14 +142,6 @@ class encrypt_page : AppCompatActivity() {
         //val canvas = Canvas(bitmap)
         //canvas.drawBitmap(oldbitmap, 0f, 0f, null)
 
-        print("Width: ")
-        println(bitmap.width)
-        print("height: ")
-        println(bitmap.height)
-
-        val m = getPixel(bitmap)
-        println(m.joinToString(""))
-
         var messagelength = binaryMessage.length
         val lengthBits = Integer.toBinaryString(messagelength).padStart(32, '0')
 
@@ -152,7 +150,8 @@ class encrypt_page : AppCompatActivity() {
         println(messagelength)
         println(lengthBits)
 
-        val maxLength = bitmap.width * bitmap.height * 3
+        // check to see if the message can fit inside the bitmap
+        val maxLength = bitmap.width * bitmap.height
         if (encodedMessage.length > maxLength) {
             throw IllegalArgumentException("Message and password are too long")
         }
