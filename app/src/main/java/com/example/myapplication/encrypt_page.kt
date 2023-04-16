@@ -89,7 +89,7 @@ class encrypt_page : AppCompatActivity() {
 
 
     fun getPixel(bitmap: Bitmap): List<Int> {
-        var length = 20
+        var length = 36
         var index = 0
         val pixelLSBs = mutableListOf<Int>()
         for (y in 0 until bitmap.height) {
@@ -124,6 +124,7 @@ class encrypt_page : AppCompatActivity() {
         // combine password and message and then convert to binary
         val binaryMessage = convertToBinary(messageString)
 
+        println("binary message")
         println(binaryMessage)
 
         // turn imageView into a bitmap
@@ -157,14 +158,22 @@ class encrypt_page : AppCompatActivity() {
         }
 
         //encode message
+        var index = 0
         val newBitmap = bitmap.copy(bitmap.config, true)
         for (y in 0 until newBitmap.height) {
+            if (index >= encodedMessage.length) {
+                break
+            }
             for (x in 0 until newBitmap.width) {
+                if (index >= encodedMessage.length) {
+                    break
+                }
                 val pixel = newBitmap.getPixel(x, y)
                 val red = Color.red(pixel)
-                val newRed = (red and 0xFE) or 0
+                val newRed = (red and 0xFE) or encodedMessage[index].code
                 val newPixel = Color.rgb(newRed, Color.green(pixel), Color.blue(pixel))
                 newBitmap.setPixel(x, y, newPixel)
+                index += 1
             }
         }
         return newBitmap
