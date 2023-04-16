@@ -87,28 +87,19 @@ class encrypt_page : AppCompatActivity() {
         return binaryString.toString()
     }
 
-    // Function to encode one bit of the message in the least significant bit of a color channel
-    fun encodeBit(color: Int, bit: Char): Int {
-        return if (bit == '0') {
-            color and 0xfe
-        } else {
-            color or 0x01
-        }
-    }
 
     fun getPixel(bitmap: Bitmap): List<Int> {
-        var length = 10
+        var length = 20
         var index = 0
         val pixelLSBs = mutableListOf<Int>()
         for (y in 0 until bitmap.height) {
             for (x in 0 until bitmap.width) {
                 val pixel = bitmap.getPixel(x, y)
+                // get only the red color channel
                 val r = Color.red(pixel) and 1
-                val g = Color.red(pixel) and 1
-                val b = Color.red(pixel) and 1
+                //val g = Color.green(pixel) and 1
                 pixelLSBs.add(r)
-                pixelLSBs.add(g)
-                pixelLSBs.add(b)
+                //pixelLSBs.add(g)
                 index += 1
                 if (index == length) {
                     break
@@ -166,32 +157,17 @@ class encrypt_page : AppCompatActivity() {
         }
 
         //encode message
-        var newLsb = Integer.parseInt(encodedMessage, 2)
-        val encodedBitmap = bitmap.copy(bitmap.config, true)
-        var bitIndex = 0
-        for (y in 0 until bitmap.height) {
-            for (x in 0 until bitmap.width) {
-                if (bitIndex >= encodedMessage.length) {
-                    break
-                }
-                val pixel = bitmap.getPixel(x, y)
+        val newBitmap = bitmap.copy(bitmap.config, true)
+        for (y in 0 until newBitmap.height) {
+            for (x in 0 until newBitmap.width) {
+                val pixel = newBitmap.getPixel(x, y)
                 val red = Color.red(pixel)
-                val green = Color.green(pixel)
-                val blue = Color.blue(pixel)
-                val newRed = (red and 0xFE) or ((newLsb shr 7) and 0x01)
-                val newGreen = (green and 0xFE) or ((newLsb shr 6) and 0x01)
-                val newBlue = (blue and 0xFE) or ((newLsb shr 5) and 0x01)
-                val newPixel = Color.rgb(newRed, newGreen, newBlue)
-                encodedBitmap.setPixel(x, y, newPixel)
-                newLsb = newLsb shl 3
-                bitIndex += 3
-            }
-            if (bitIndex >= encodedMessage.length) {
-                break
+                val newRed = (red and 0xFE) or 0
+                val newPixel = Color.rgb(newRed, Color.green(pixel), Color.blue(pixel))
+                newBitmap.setPixel(x, y, newPixel)
             }
         }
-
-        return encodedBitmap
+        return newBitmap
     }
 
 
