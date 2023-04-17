@@ -1,12 +1,16 @@
 package com.example.myapplication
 
+import android.content.ContentValues
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.os.Message
 import android.provider.MediaStore
 import android.util.Log
@@ -14,9 +18,12 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import com.google.android.material.textfield.TextInputEditText
+import java.io.IOException
 
 class encrypt_page : AppCompatActivity() {
 
@@ -26,6 +33,7 @@ class encrypt_page : AppCompatActivity() {
     private lateinit var encrypt_button: Button
     private lateinit var download_button: Button
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_encrypt_page)
@@ -47,38 +55,48 @@ class encrypt_page : AppCompatActivity() {
         status_text = findViewById(R.id.e_alert)
         encrypt_button = findViewById(R.id.e_button)
 
-        // val encodedImage: Bitmap? = null
-
         encrypt_button.setOnClickListener {
             val messagebox: TextInputEditText = findViewById(R.id.e_messagebox)
 
             val encodedImage = encodeImage(imageView, messagebox)
 
-            val maxlen = 32 + convertToBinary(messagebox.text.toString()).length
-            val m = getPixel(encodedImage, maxlen)
-            println(m.joinToString(""))
+            // set new bitmap to ImageView to be downloaded
+            imageView.setImageBitmap(encodedImage)
 
-            // get secret message by dropping first 32 bits
-            val secret_message = m.drop(32).toList()
-
-
-            val test = fromBinaryString(secret_message.joinToString(""))
-            println(test)
-
-
+            // Display the encrypted message
             status_text.visibility = View.VISIBLE
 
-
         }
-
+        // initialize download button
         download_button = findViewById(R.id.download_button)
 
         download_button.setOnClickListener {
-
+            // get the encoded bitmap from imageView to bitmap
+            val encodedBitmap = (imageView.drawable as BitmapDrawable).bitmap
+            downloadImageToGallery(encodedBitmap, this, "encoded_image")
         }
 
     }
 
+    // download the image in PNG form and save to phone gallery
+    @RequiresApi(Build.VERSION_CODES.Q)
+    fun downloadImageToGallery(bitmap: Bitmap, context: Context, title: String) {
+        val contentValues = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, "$title.png")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+            put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+        }
+
+        val uri = context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+
+        uri?.let {
+            val outputStream = context.contentResolver.openOutputStream(uri)
+            outputStream?.use { stream ->
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+                Toast.makeText(context, "Image saved to gallery", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     private fun convertToBinary(messageInput: String): String {
         val bytes = messageInput.toByteArray()
@@ -93,7 +111,6 @@ class encrypt_page : AppCompatActivity() {
         }
         return binaryString.toString()
     }
-
 
     fun getPixel(bitmap: Bitmap, maxlength: Int): List<Int> {
         var index = 0
@@ -118,8 +135,6 @@ class encrypt_page : AppCompatActivity() {
         return pixelLSBs
     }
 
-
-
     private fun encodeImage(
         image: ImageView,
         message: TextInputEditText
@@ -133,22 +148,20 @@ class encrypt_page : AppCompatActivity() {
         println("binary message")
         println(binaryMessage)
 
+
         // turn imageView into a bitmap
         val drawable = image.drawable
         val bitmapDrawable = drawable as BitmapDrawable
         val bitmap = bitmapDrawable.bitmap
 
-        //val bitmap = Bitmap.createBitmap(oldbitmap.width, oldbitmap.height, oldbitmap.config)
-        //val canvas = Canvas(bitmap)
-        //canvas.drawBitmap(oldbitmap, 0f, 0f, null)
 
         var messagelength = binaryMessage.length
         val lengthBits = Integer.toBinaryString(messagelength).padStart(32, '0')
 
         val encodedMessage = lengthBits + binaryMessage
 
-        println(messagelength)
-        println(lengthBits)
+        //println(messagelength)
+        //println(lengthBits)
 
         // check to see if the message can fit inside the bitmap
         val maxLength = bitmap.width * bitmap.height
@@ -177,8 +190,6 @@ class encrypt_page : AppCompatActivity() {
         }
         return newBitmap
     }
-
-
 
 
     // Function to convert a binary string to a plain text string
