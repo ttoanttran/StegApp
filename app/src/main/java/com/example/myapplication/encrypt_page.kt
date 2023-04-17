@@ -123,9 +123,7 @@ class encrypt_page : AppCompatActivity() {
                 val pixel = bitmap.getPixel(x, y)
                 // get only the red color channel
                 val r = Color.red(pixel) and 1
-                //val g = Color.green(pixel) and 1
                 pixelLSBs.add(r)
-                //pixelLSBs.add(g)
                 index += 1
                 if (index >= maxlength) {
                     break
@@ -159,9 +157,6 @@ class encrypt_page : AppCompatActivity() {
         val lengthBits = Integer.toBinaryString(messagelength).padStart(32, '0')
 
         val encodedMessage = lengthBits + binaryMessage
-
-        //println(messagelength)
-        //println(lengthBits)
 
         // check to see if the message can fit inside the bitmap
         val maxLength = bitmap.width * bitmap.height
