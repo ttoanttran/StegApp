@@ -53,9 +53,12 @@ class decrypt_page : AppCompatActivity() {
 
             val mes = getPixel(bitmap, lengthInt + 32)
 
-            val secret_message = mes.drop(32).toList()
-            val test = fromBinaryString(secret_message.joinToString(""))
-            println(test)
+            val secretMessageBinary = mes.drop(32).toList()
+            val secretMessageString = fromBinaryString(secretMessageBinary.joinToString(""))
+
+            // display the secret message in the text box
+            val messagebox: TextInputEditText = findViewById(R.id.d_messagebox)
+            messagebox.setText(secretMessageString)
 
             status_text.visibility = View.VISIBLE
         }
