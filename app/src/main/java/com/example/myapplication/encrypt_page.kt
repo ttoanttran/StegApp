@@ -112,27 +112,6 @@ class encrypt_page : AppCompatActivity() {
         return binaryString.toString()
     }
 
-    fun getPixel(bitmap: Bitmap, maxlength: Int): List<Int> {
-        var index = 0
-        val pixelLSBs = mutableListOf<Int>()
-        for (y in 0 until bitmap.height) {
-            if (index >= maxlength) {
-                break
-            }
-            for (x in 0 until bitmap.width) {
-                val pixel = bitmap.getPixel(x, y)
-                // get only the red color channel
-                val r = Color.red(pixel) and 1
-                pixelLSBs.add(r)
-                index += 1
-                if (index >= maxlength) {
-                    break
-                }
-            }
-        }
-        return pixelLSBs
-    }
-
     private fun encodeImage(
         image: ImageView,
         message: TextInputEditText

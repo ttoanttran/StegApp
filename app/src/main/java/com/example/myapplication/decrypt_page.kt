@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.textfield.TextInputEditText
@@ -28,9 +29,15 @@ class decrypt_page : AppCompatActivity() {
         button = findViewById(R.id.upload_button)
         imageView = findViewById(R.id.d_image)
 
+        val messagebox: TextInputEditText = findViewById(R.id.d_messagebox)
+
         val galleryImage = registerForActivityResult(ActivityResultContracts.GetContent(),
             ActivityResultCallback {
                 imageView.setImageURI(it)
+                // clear the text box when the user uploads a new image
+                messagebox.setText("")
+                // clear the decrypted message text
+                status_text.visibility = View.INVISIBLE
             })
 
         button.setOnClickListener {
@@ -46,21 +53,36 @@ class decrypt_page : AppCompatActivity() {
             val bitmapDrawable = drawable as BitmapDrawable
             val bitmap = bitmapDrawable.bitmap
 
-            // get the length of the message as a integer to use getPixel() function
-            val lengthMessage = getLengthOfBitmap(bitmap)
-            val lengthMessageString = lengthMessage.joinToString("")
-            val lengthInt = lengthMessageString.toInt(2)
+            try {
+                // try but if a NumberFormatException occurs, due to the binary string of the
+                // 32 bits not being a valid Int b/c it exceeds max value of an Int
+                val lengthMessage = getLengthOfBitmap(bitmap)
+                val lengthMessageString = lengthMessage.joinToString("")
+                val lengthInt = lengthMessageString.toInt(2)
+                try {
+                    // if the message does not fit, then that means there is no message because
+                    // the message cannot be encoded if it is too long
+                    if (lengthInt + 32 > bitmap.width * bitmap.height) {
+                        throw IllegalArgumentException("There is no hidden message in this image")
+                    }
 
-            val mes = getPixel(bitmap, lengthInt + 32)
+                    // get the length of the message as a integer to use getPixel() function
+                    val mes = getPixel(bitmap, lengthInt + 32)
 
-            val secretMessageBinary = mes.drop(32).toList()
-            val secretMessageString = fromBinaryString(secretMessageBinary.joinToString(""))
+                    val secretMessageBinary = mes.drop(32).toList()
+                    val secretMessageString = fromBinaryString(secretMessageBinary.joinToString(""))
 
-            // display the secret message in the text box
-            val messagebox: TextInputEditText = findViewById(R.id.d_messagebox)
-            messagebox.setText(secretMessageString)
+                    // display the secret message in the text box
+                    val messagebox: TextInputEditText = findViewById(R.id.d_messagebox)
+                    messagebox.setText(secretMessageString)
 
-            status_text.visibility = View.VISIBLE
+                    status_text.visibility = View.VISIBLE
+                } catch (e: IllegalArgumentException) {
+                    Toast.makeText(this, "There is no hidden message in this image", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: NumberFormatException) {
+                Toast.makeText(this, "There is no hidden message in this image", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
