@@ -85,7 +85,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
-        android:hint="@string/password"
+        android:hint="@string/password_4_characters"
         android:textColorHint="@color/night"
         app:boxBackgroundColor="@color/light_blue"
         app:endIconMode="password_toggle"
@@ -94,7 +94,7 @@
         app:layout_constraintTop_toBottomOf="@+id/encrypted_message">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/passbox"
+            android:id="@+id/e_passbox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="top"

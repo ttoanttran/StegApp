@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.textfield.TextInputEditText
+import java.math.BigInteger
 
 class decrypt_page : AppCompatActivity() {
 
@@ -53,30 +54,47 @@ class decrypt_page : AppCompatActivity() {
             val bitmapDrawable = drawable as BitmapDrawable
             val bitmap = bitmapDrawable.bitmap
 
+            val passwordbox: TextInputEditText = findViewById(R.id.passbox)
+            val passString: String = passwordbox.text.toString()
+
             try {
                 // try but if a NumberFormatException occurs, due to the binary string of the
                 // 32 bits not being a valid Int b/c it exceeds max value of an Int
                 val lengthMessage = getLengthOfBitmap(bitmap)
                 val lengthMessageString = lengthMessage.joinToString("")
                 val lengthInt = lengthMessageString.toInt(2)
+
                 try {
                     // if the message does not fit, then that means there is no message because
                     // the message cannot be encoded if it is too long
-                    if (lengthInt + 32 > bitmap.width * bitmap.height) {
+                    if (lengthInt + 64 > bitmap.width * bitmap.height) {
                         throw IllegalArgumentException("There is no hidden message in this image")
                     }
 
                     // get the length of the message as a integer to use getPixel() function
-                    val mes = getPixel(bitmap, lengthInt + 32)
+                    val mes = getPixel(bitmap, lengthInt + 64)
 
-                    val secretMessageBinary = mes.drop(32).toList()
+                    val secretMessageBinary = mes.drop(64).toList()
+
                     val secretMessageString = fromBinaryString(secretMessageBinary.joinToString(""))
 
-                    // display the secret message in the text box
-                    val messagebox: TextInputEditText = findViewById(R.id.d_messagebox)
-                    messagebox.setText(secretMessageString)
+                    // get the password binary form by dropping first 32 and taking next 64 bits
+                    val droplength = mes.drop(32).toList()
+                    val passconvert = droplength.take(32).toList()
+                    val pass = fromBinaryString(passconvert.joinToString(""))
+                    println(pass)
 
-                    status_text.visibility = View.VISIBLE
+                    if (pass == passString) {
+                        // display the secret message in the text box
+                        val messagebox: TextInputEditText = findViewById(R.id.d_messagebox)
+                        messagebox.setText(secretMessageString)
+
+                        status_text.visibility = View.VISIBLE
+                    } else {
+                        Toast.makeText(this, "Password is incorrect", Toast.LENGTH_SHORT).show()
+                    }
+
+
                 } catch (e: IllegalArgumentException) {
                     Toast.makeText(this, "There is no hidden message in this image", Toast.LENGTH_SHORT).show()
                 }
@@ -86,9 +104,10 @@ class decrypt_page : AppCompatActivity() {
         }
     }
 
+    // find the first LSB bits to find the length of the binary message
     fun getLengthOfBitmap (bitmap: Bitmap): List<Int> {
         var index = 0
-        var messageLengthList = mutableListOf<Int>()
+        val messageLengthList = mutableListOf<Int>()
         for (y in 0 until bitmap.height) {
             if (index >= 32) {
                 break

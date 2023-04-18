@@ -5,4 +5,5 @@
     <string name="encrypt">Encrypt</string>
     <string name="download">Download</string>
     <string name="decrypt" />
+    <string name="password_4_characters">Password (4 characters)</string>
 </resources>

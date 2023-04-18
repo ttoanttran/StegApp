@@ -24,6 +24,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import com.google.android.material.textfield.TextInputEditText
 import java.io.IOException
+import java.math.BigInteger
 
 class encrypt_page : AppCompatActivity() {
 
@@ -59,15 +60,16 @@ class encrypt_page : AppCompatActivity() {
 
         encrypt_button.setOnClickListener {
             val messagebox: TextInputEditText = findViewById(R.id.e_messagebox)
+            val epassbox: TextInputEditText = findViewById(R.id.e_passbox)
 
-            val encodedImage = encodeImage(imageView, messagebox)
+            val encodedImage = encodeImage(imageView, messagebox, epassbox)
 
             // set new bitmap to ImageView to be downloaded
             imageView.setImageBitmap(encodedImage)
 
-            // Display the encrypted message
-            status_text.visibility = View.VISIBLE
+            // Display the encrypted message if image was encoded
 
+            status_text.visibility = View.VISIBLE
         }
         // initialize download button
         download_button = findViewById(R.id.download_button)
@@ -116,50 +118,78 @@ class encrypt_page : AppCompatActivity() {
 
     private fun encodeImage(
         image: ImageView,
-        message: TextInputEditText
+        message: TextInputEditText,
+        password: TextInputEditText
     ): Bitmap {
+        // turn imageView into a bitmap
+        val drawable = image.drawable
+        val bitmapDrawable = drawable as BitmapDrawable
+        val bitmap = bitmapDrawable.bitmap
+
         //turn message and password into a string first
         val messageString: String = message.text.toString()
 
         // combine password and message and then convert to binary
         val binaryMessage = convertToBinary(messageString)
 
-        // turn imageView into a bitmap
-        val drawable = image.drawable
-        val bitmapDrawable = drawable as BitmapDrawable
-        val bitmap = bitmapDrawable.bitmap
-
-        var messagelength = binaryMessage.length
-        val lengthBits = Integer.toBinaryString(messagelength).padStart(32, '0')
-
-        val encodedMessage = lengthBits + binaryMessage
-
-        // check to see if the message can fit inside the bitmap
-        val maxLength = bitmap.width * bitmap.height
-        if (encodedMessage.length > maxLength) {
-            throw IllegalArgumentException("Message and password are too long")
-        }
-
-        //encode message
-        var index = 0
-        val newBitmap = bitmap.copy(bitmap.config, true)
-        for (y in 0 until newBitmap.height) {
-            if (index >= encodedMessage.length) {
-                break
+        // get password in binary form
+        // test to see if password is 8 or less characters
+        try {
+            val passwordString: String = password.text.toString()
+            if (passwordString.length != 4) {
+                throw IllegalArgumentException("Password has to be 4 characters")
             }
-            for (x in 0 until newBitmap.width) {
-                if (index >= encodedMessage.length) {
-                    break
+
+            // pad the password to 64 bits
+            val binaryPassword = convertToBinary(passwordString)
+            val paddedPassword = binaryPassword.padStart(32, '0')
+
+            // get length of message in binary form
+            val messagelength = binaryMessage.length
+            val lengthBits = Integer.toBinaryString(messagelength).padStart(32, '0')
+
+            val encodedMessage = lengthBits + paddedPassword + binaryMessage
+
+            // check to see if the message can fit inside the bitmap
+            try {
+                val maxLength = bitmap.width * bitmap.height
+                if (encodedMessage.length > maxLength) {
+                    throw IllegalArgumentException("Message is too long")
                 }
-                val pixel = newBitmap.getPixel(x, y)
-                val red = Color.red(pixel)
-                val newRed = (red and 0xFE) or encodedMessage[index].code
-                val newPixel = Color.rgb(newRed, Color.green(pixel), Color.blue(pixel))
-                newBitmap.setPixel(x, y, newPixel)
-                index += 1
+
+                //encode message
+                var index = 0
+                val newBitmap = bitmap.copy(bitmap.config, true)
+                for (y in 0 until newBitmap.height) {
+                    if (index >= encodedMessage.length) {
+                        break
+                    }
+                    for (x in 0 until newBitmap.width) {
+                        if (index >= encodedMessage.length) {
+                            break
+                        }
+                        val pixel = newBitmap.getPixel(x, y)
+                        val red = Color.red(pixel)
+                        val newRed = (red and 0xFE) or encodedMessage[index].code
+                        val newPixel = Color.rgb(newRed, Color.green(pixel), Color.blue(pixel))
+                        newBitmap.setPixel(x, y, newPixel)
+                        index += 1
+                    }
+                }
+                return newBitmap
+            } catch (e: IllegalArgumentException) {
+                Toast.makeText(this, "Message is too long", Toast.LENGTH_SHORT).show()
             }
+        } catch (e: IllegalArgumentException) {
+            Toast.makeText(this, "Password has to be 4 characters", Toast.LENGTH_SHORT).show()
         }
-        return newBitmap
+        status_text.setText("Encryption Failed")
+        return bitmap
+    }
+
+    fun fromBinaryString(binaryString: String): String {
+        val bytes = binaryString.chunked(8).map { Integer.parseInt(it, 2).toByte() }.toByteArray()
+        return String(bytes, Charsets.UTF_8)
     }
 }
 
