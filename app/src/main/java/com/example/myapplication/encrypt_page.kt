@@ -45,6 +45,8 @@ class encrypt_page : AppCompatActivity() {
         val galleryImage = registerForActivityResult(ActivityResultContracts.GetContent(),
             ActivityResultCallback {
                 imageView.setImageURI(it)
+                // hide encrypted messsage when user uploads new image
+                status_text.visibility = View.INVISIBLE
             })
 
         imagebutton.setOnClickListener {
@@ -122,15 +124,10 @@ class encrypt_page : AppCompatActivity() {
         // combine password and message and then convert to binary
         val binaryMessage = convertToBinary(messageString)
 
-        println("binary message")
-        println(binaryMessage)
-
-
         // turn imageView into a bitmap
         val drawable = image.drawable
         val bitmapDrawable = drawable as BitmapDrawable
         val bitmap = bitmapDrawable.bitmap
-
 
         var messagelength = binaryMessage.length
         val lengthBits = Integer.toBinaryString(messagelength).padStart(32, '0')
@@ -164,14 +161,5 @@ class encrypt_page : AppCompatActivity() {
         }
         return newBitmap
     }
-
-
-    // Function to convert a binary string to a plain text string
-    fun fromBinaryString(binaryString: String): String {
-        val bytes = binaryString.chunked(8).map { Integer.parseInt(it, 2).toByte() }.toByteArray()
-        return String(bytes, Charsets.UTF_8)
-    }
-
-
 }
 
