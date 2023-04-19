@@ -78,11 +78,10 @@ class decrypt_page : AppCompatActivity() {
 
                     val secretMessageString = fromBinaryString(secretMessageBinary.joinToString(""))
 
-                    // get the password binary form by dropping first 32 and taking next 64 bits
+                    // get the password binary form by dropping first 32 and taking next 32 bits
                     val droplength = mes.drop(32).toList()
                     val passconvert = droplength.take(32).toList()
                     val pass = fromBinaryString(passconvert.joinToString(""))
-                    println(pass)
 
                     if (pass == passString) {
                         // display the secret message in the text box
