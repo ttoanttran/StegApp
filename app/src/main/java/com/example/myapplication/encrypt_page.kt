@@ -167,7 +167,7 @@ class encrypt_page : AppCompatActivity() {
                 throw IllegalArgumentException("Password has to be 4 characters")
             }
 
-            // pad the password to 64 bits
+            // pad the password to 32 bits
             val binaryPassword = convertToBinary(passwordString)
             val paddedPassword = binaryPassword.padStart(32, '0')
 
