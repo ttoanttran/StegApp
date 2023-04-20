@@ -63,7 +63,6 @@ class encrypt_page : AppCompatActivity() {
             val epassbox: TextInputEditText = findViewById(R.id.e_passbox)
 
             val encodedImage = encodeImage(imageView, messagebox, epassbox)
-
             // set new bitmap to ImageView to be downloaded
             imageView.setImageBitmap(encodedImage)
 
@@ -81,6 +80,32 @@ class encrypt_page : AppCompatActivity() {
         }
 
     }
+
+    private fun encryptMessage2(messageString: String, image: ImageView): String {
+
+        // modulo by 66 because there are 94 possible characters on the keyboard
+        val widthKeyValue: Int = image.width % 94
+        var newChar : Char
+        var scrambled: String = ""
+
+        for (char in messageString) {
+
+            // here is what each number represents:
+            // 97 is 'a' in unicode, which is the base for the lowercase numbers
+            // 61 is 'A' in unicode, which is the base for the Uppercase numbers
+            // 26 because there are 26 characters in the English alphabet
+                newChar = when {
+                    char.isLowerCase() -> ((char.code - 97 + widthKeyValue) % 26 + 97).toChar()
+                    char.isUpperCase() -> ((char.code - 65 + widthKeyValue) % 26 + 65).toChar()
+                    else -> char
+            }
+
+            scrambled = scrambled.plus(newChar)
+        }
+        return scrambled
+
+    }
+
 
     // download the image in PNG form and save to phone gallery
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -127,7 +152,9 @@ class encrypt_page : AppCompatActivity() {
         val bitmap = bitmapDrawable.bitmap
 
         //turn message and password into a string first
-        val messageString: String = message.text.toString()
+        var messageString: String = message.text.toString()
+        messageString = encryptMessage2(messageString, image)
+        Log.e("tag", messageString)
 
         // combine password and message and then convert to binary
         val binaryMessage = convertToBinary(messageString)
@@ -186,6 +213,9 @@ class encrypt_page : AppCompatActivity() {
         status_text.setText("Encryption Failed")
         return bitmap
     }
+
+
+
 
     fun fromBinaryString(binaryString: String): String {
         val bytes = binaryString.chunked(8).map { Integer.parseInt(it, 2).toByte() }.toByteArray()
