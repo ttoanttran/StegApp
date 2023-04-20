@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -78,6 +79,10 @@ class decrypt_page : AppCompatActivity() {
 
                     val secretMessageString = fromBinaryString(secretMessageBinary.joinToString(""))
 
+                    // modulo the key by 66 because there are 66 unique keys on the keyboard
+                    val widthKeyValue: Int = imageView.width % 96
+                    var unscrambledText: String = decryptMessage(secretMessageString, widthKeyValue)
+
                     // get the password binary form by dropping first 32 and taking next 64 bits
                     val droplength = mes.drop(32).toList()
                     val passconvert = droplength.take(32).toList()
@@ -87,7 +92,8 @@ class decrypt_page : AppCompatActivity() {
                     if (pass == passString) {
                         // display the secret message in the text box
                         val messagebox: TextInputEditText = findViewById(R.id.d_messagebox)
-                        messagebox.setText(secretMessageString)
+                        messagebox.setText(unscrambledText)
+
 
                         status_text.visibility = View.VISIBLE
                     } else {
@@ -153,4 +159,32 @@ class decrypt_page : AppCompatActivity() {
         return String(bytes, Charsets.UTF_8)
     }
 
+    // This function works by formatting the number so it fits in the unicode base 0 - 127 range
+    fun decryptMessage(cipherText: String, key: Int): String {
+        var descrambled : String = ""
+        var newChar : Char = 'a'
+
+        for (char in cipherText) {
+
+            // here is what each number represents:
+            // 97 is 'a' in unicode, which is the base for the lowercase numbers
+            // 61 is 'A' in unicode, which is the base for the Uppercase numbers
+            // 26 because there are 26 characters in the English alphabet
+                newChar = when {
+                    char.isLowerCase() -> (((char.code - 97 - (key)) % 26) + 97 + 26).toChar()
+                    char.isUpperCase() -> (((char.code - 65 - (key)) % 26) + 65 + 26).toChar()
+                    else -> char
+                }
+
+            //accounting for the special case with a when decrypting
+            // really not sure why A's and a's were being weird, I' just brute forcing their change
+            if(newChar == '{')
+                newChar = 'a'
+            if(newChar == '[')
+                newChar = 'A'
+            descrambled = descrambled.plus(newChar)
+        }
+
+        return descrambled
+    }
 }
