@@ -83,8 +83,8 @@ class encrypt_page : AppCompatActivity() {
 
     private fun encryptMessage2(messageString: String, image: ImageView): String {
 
-        // modulo by 66 because there are 96 possible characters on the keyboard
-        val widthKeyValue: Int = image.width % 96
+        // modulo by 66 because there are 94 possible characters on the keyboard
+        val widthKeyValue: Int = image.width % 94
         var newChar : Char
         var scrambled: String = ""
 

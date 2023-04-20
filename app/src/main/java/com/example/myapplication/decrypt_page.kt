@@ -80,7 +80,7 @@ class decrypt_page : AppCompatActivity() {
                     val secretMessageString = fromBinaryString(secretMessageBinary.joinToString(""))
 
                     // modulo the key by 66 because there are 66 unique keys on the keyboard
-                    val widthKeyValue: Int = imageView.width % 96
+                    val widthKeyValue: Int = imageView.width % 94
                     var unscrambledText: String = decryptMessage(secretMessageString, widthKeyValue)
 
                     // get the password binary form by dropping first 32 and taking next 64 bits
